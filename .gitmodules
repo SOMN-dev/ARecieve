@@ -1,0 +1,3 @@
+[submodule "ArClient"]
+	path = ArClient
+	url = git@github.com:sleevy-dev/ArClient.git
