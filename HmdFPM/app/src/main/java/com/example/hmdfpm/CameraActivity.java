@@ -20,13 +20,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
+import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
 import java.io.IOException;
@@ -34,37 +34,13 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
+import com.example.hmdfpm.netservice.TCPLocalDeviceLoader;
 import com.stealthcopter.networktools.subnet.*;
 
 import static android.Manifest.permission.CAMERA;
 
 public class CameraActivity  extends AppCompatActivity implements CameraBridgeViewBase.CvCameraViewListener2 {
-
-    private class PingCheckRunnable implements Runnable{
-        private final AtomicBoolean running = new AtomicBoolean(false);
-
-        @Override
-        public void run() {
-            running.set(true);
-            while (running.get()) {
-                Map<String, Device> devices = TCPLocalDeviceLoader.getInstance().devices;
-
-                if(devices.isEmpty()) continue;
-
-                Message message = new Message();
-                message.what = 3;
-                message.obj = devices;
-                handler.sendMessage(message);
-                running.set(false);
-            }
-        }
-
-        public void stopThread(){
-            running.set(false);
-        }
-    }
 
     private final Matcher matcher = new Matcher();
     private static final String TAG = "opencv";
@@ -73,14 +49,9 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
     private Button mButtonConnect = null;
     private Button mButtonUpdate = null;
 
-    private ConstraintLayout mLayout = null;
-
-    private float matchedPosX, matchedPosY;
     private TextView textView;
 
-    private Thread netThread;
-
-    private PingCheckRunnable pingCheckRunnable = new PingCheckRunnable();
+    private final PingCheckRunnable pingCheckRunnable = new PingCheckRunnable(this);
 
     Handler handler = new Handler(new Handler.Callback() {
         @Override
@@ -112,19 +83,12 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
         }
     });
 
-    private BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
+    private final BaseLoaderCallback mLoaderCallback = new BaseLoaderCallback(this) {
         public void onManagerConnected(int status){
-            switch (status){
-                case LoaderCallbackInterface
-                        .SUCCESS: {
-                    mOpenCvCameraView.enableView();
-                }
-                break;
-
-                default: {
-                    super.onManagerConnected(status);
-                }
-                break;
+            if (status == LoaderCallbackInterface.SUCCESS) {
+                mOpenCvCameraView.enableView();
+            } else {
+                super.onManagerConnected(status);
             }
         }
     };
@@ -139,7 +103,6 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
 
         setContentView(R.layout.camera_activity);
 
-        mLayout = (ConstraintLayout)findViewById(R.id.camera_layout);
         mButtonConnect = findViewById(R.id.camera_matched_button);
         mButtonUpdate = findViewById(R.id.update_button);
         textView = findViewById(R.id.textView);
@@ -149,7 +112,6 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
         mOpenCvCameraView.setCvCameraViewListener(this);
         mOpenCvCameraView.setCameraIndex(0);
 
-
         mButtonConnect.setVisibility(View.INVISIBLE);
         mButtonUpdate.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -158,27 +120,27 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
             }
         });
 
-        netThread = new Thread(pingCheckRunnable);
-
-        netThread.start();
+        Thread wifiThread = new Thread(pingCheckRunnable);
+        wifiThread.start();
 
         try{
-            InputStream is = getAssets().open("TheLastNight.jpg");
+            InputStream is = getAssets().open("test2.jpg");
             Bitmap bitmap = BitmapFactory.decodeStream(is);
 
             Mat image = new Mat();
             Utils.bitmapToMat(bitmap, image);
             matcher.setOriginImg(image);
-
+            matcher.start();
         } catch (IOException e){
             Log.e("IO Error", "Cannot found file");
             e.printStackTrace();
         }
-
     }
 
     public void onPause()
     {
+        matcher.interrupt();
+
         super.onPause();
         if (mOpenCvCameraView != null)
             mOpenCvCameraView.disableView();
@@ -189,6 +151,8 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
     {
         super.onResume();
 
+        if(!matcher.isAlive()) matcher.start();
+
         if (!OpenCVLoader.initDebug()) {
             OpenCVLoader.initAsync(OpenCVLoader.OPENCV_VERSION_3_2_0, this, mLoaderCallback);
         } else {
@@ -198,6 +162,8 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
 
     public void onDestroy() {
         super.onDestroy();
+
+        matcher.interrupt();
 
         if (mOpenCvCameraView != null)
             mOpenCvCameraView.disableView();
@@ -215,26 +181,19 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
 
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
-        Mat matInput = inputFrame.rgba();
-        Mat img = matcher.run(matInput);
-
-        if(img != null) {
-            matInput = img;
-
-            matchedPosX = matcher.centerOfMatches[0];
-            matchedPosY = matcher.centerOfMatches[1];
-
-            Message message = Message.obtain();
+        Mat matInput;
+        matInput = inputFrame.rgba();
+        matcher.imgScene = matInput;
+        Message message = Message.obtain();
+        if(matcher.isMatched) {
             message.what = 1;
-
-            handler.sendMessage(message);
         }
 
         else{
-            Message message = Message.obtain();
             message.what = 0;
-            handler.sendMessage(message);
         }
+
+        handler.sendMessage(message);
         return matInput;
     }
 

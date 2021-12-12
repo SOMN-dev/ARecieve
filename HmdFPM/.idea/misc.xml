@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ARecive/HmdFPM/app/src/main/res/layout/activity_network_test.xml" value="0.3428442028985507" />
+        <entry key="..\:/ARecive/HmdFPM/app/src/main/res/layout/activity_network_test_client.xml" value="0.20364583333333333" />
         <entry key="..\:/HMD/HmdFPM/app/src/main/res/layout/activity_network.xml" value="0.1" />
         <entry key="..\:/HMD/HmdFPM/app/src/main/res/layout/camera_activity.xml" value="0.25" />
         <entry key="..\:/HMD/HmdFPM/app/src/main/res/layout/main_activity.xml" value="0.12777777777777777" />

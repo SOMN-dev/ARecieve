@@ -30,6 +30,12 @@
         android:allowBackup="true"
         android:icon="@drawable/icon"
         android:requestLegacyExternalStorage="true">
+        <activity
+            android:name=".NetworkTestClientActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NetworkTestActivity"
+            android:exported="false" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

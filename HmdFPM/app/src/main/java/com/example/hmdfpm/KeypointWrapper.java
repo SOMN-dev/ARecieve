@@ -2,11 +2,16 @@ package com.example.hmdfpm;
 
 import android.media.audiofx.AudioEffect;
 
+import com.example.hmdfpm.netservice.IWrapper;
+
 import org.opencv.core.KeyPoint;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfKeyPoint;
 
-public class KeypointWrapper {
+import java.io.Serializable;
+
+public class KeypointWrapper implements IWrapper, Serializable {
 
     private String ipAddress;
     private String macAddress;
@@ -21,6 +26,7 @@ public class KeypointWrapper {
         this.column = column;
         this.matOfKeyPoint = matOfKeyPoint;
         this.descriptor = descriptor;
+
     }
 
     public MatOfKeyPoint getMatOfKeyPoint() {
