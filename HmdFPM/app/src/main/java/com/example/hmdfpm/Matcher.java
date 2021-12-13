@@ -35,9 +35,22 @@ class Matcher extends Thread{
     public boolean isReady = false;
 
     private ORB detector;
-    public Mat imgScene = null;
+    private Mat imgScene = null;
 
-    public boolean isMatched = false;
+    private boolean isMatched = false;
+
+    public Mat getImgScene() {
+        return imgScene;
+    }
+
+    public void setImgScene(Mat img)
+    {
+        imgScene = img;
+    }
+
+    public boolean isMatched() {
+        return isMatched;
+    }
 
     public void setOriginImg(Mat image){
         imgObject = image;

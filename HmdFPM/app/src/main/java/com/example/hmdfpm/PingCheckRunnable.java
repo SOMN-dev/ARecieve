@@ -27,7 +27,7 @@ class PingCheckRunnable implements Runnable {
             Message message = new Message();
             message.what = 3;
             message.obj = devices;
-            cameraActivity.handler.sendMessage(message);
+            cameraActivity.wifiHandler.sendMessage(message);
             running.set(false);
         }
     }

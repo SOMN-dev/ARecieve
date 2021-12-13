@@ -26,7 +26,6 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.android.Utils;
-import org.opencv.core.Core;
 import org.opencv.core.Mat;
 
 import java.io.IOException;
@@ -53,33 +52,39 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
 
     private final PingCheckRunnable pingCheckRunnable = new PingCheckRunnable(this);
 
-    Handler handler = new Handler(new Handler.Callback() {
+    Handler matchHandler = new Handler(new Handler.Callback() {
         @Override
         public boolean handleMessage(@NonNull Message msg) {
             if(msg.what == 1){
                 mButtonConnect.setVisibility(View.VISIBLE);
-                return true;
             }
 
-            if(msg.what == 0)
+            else if(msg.what == 0)
             {
                 mButtonConnect.setVisibility(View.INVISIBLE);
             }
 
-            if(msg.what == 3){
-                if(textView.length() > 0) return false;
+            else return false;
 
-                Map<String, Device> devices = TCPLocalDeviceLoader.getInstance().devices;
+            return true;
+        }
+    });
 
-                for (String ip : devices.keySet()) {
-                    Device device = devices.get(ip);
-                    textView.append("Device " + device.hostname+"\n");
-                    textView.append("IP : " + device.ip + "\n");
-                    textView.append("Mack : " + device.mac + "\n");
-                    textView.append("\n");
-                }
+    Handler wifiHandler = new Handler(new Handler.Callback() {
+        @Override
+        public boolean handleMessage(@NonNull Message msg) {
+            if(textView.length() > 0) return false;
+
+            Map<String, Device> devices = TCPLocalDeviceLoader.getInstance().devices;
+
+            for (String ip : devices.keySet()) {
+                Device device = devices.get(ip);
+                textView.append("Device " + device.hostname+"\n");
+                textView.append("IP : " + device.ip + "\n");
+                textView.append("Mack : " + device.mac + "\n");
+                textView.append("\n");
             }
-            return false;
+            return true;
         }
     });
 
@@ -124,7 +129,7 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
         wifiThread.start();
 
         try{
-            InputStream is = getAssets().open("test2.jpg");
+            InputStream is = getAssets().open("test.jpg");
             Bitmap bitmap = BitmapFactory.decodeStream(is);
 
             Mat image = new Mat();
@@ -183,9 +188,10 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Mat matInput;
         matInput = inputFrame.rgba();
-        matcher.imgScene = matInput;
+        matcher.setImgScene(matInput);
+
         Message message = Message.obtain();
-        if(matcher.isMatched) {
+        if(matcher.isMatched()) {
             message.what = 1;
         }
 
@@ -193,7 +199,7 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
             message.what = 0;
         }
 
-        handler.sendMessage(message);
+        matchHandler.sendMessage(message);
         return matInput;
     }
 
@@ -267,7 +273,8 @@ public class CameraActivity  extends AppCompatActivity implements CameraBridgeVi
         TCPLocalDeviceLoader.getInstance().clear();
         TCPLocalDeviceLoader.getInstance().findSubnetDevices();
 
-        pingCheckRunnable.run();
+        Thread wifiThread = new Thread(pingCheckRunnable);
+        wifiThread.start();
     }
 
     public void clickConnectCallback(String sourceIp) {

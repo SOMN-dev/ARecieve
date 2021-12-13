@@ -1,9 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".NetworkTestClientActivity">
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+version https://git-lfs.github.com/spec/v1
+oid sha256:f0b6aa92ccb2cc3e49e9b965994cc864cf063284c54292e5e6dd758df0333b1a
+size 446

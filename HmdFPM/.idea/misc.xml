@@ -1,21 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/ARecive/HmdFPM/app/src/main/res/layout/activity_network_test.xml" value="0.3428442028985507" />
-        <entry key="..\:/ARecive/HmdFPM/app/src/main/res/layout/activity_network_test_client.xml" value="0.20364583333333333" />
-        <entry key="..\:/HMD/HmdFPM/app/src/main/res/layout/activity_network.xml" value="0.1" />
-        <entry key="..\:/HMD/HmdFPM/app/src/main/res/layout/camera_activity.xml" value="0.25" />
-        <entry key="..\:/HMD/HmdFPM/app/src/main/res/layout/main_activity.xml" value="0.12777777777777777" />
-        <entry key="..\:/Users/vhexl/Documents/MP_HMD/HmdFPM/app/src/main/res/layout/camera_activity.xml" value="0.203125" />
-      </map>
-    </option>
-  </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
-    <output url="file://$PROJECT_DIR$/build/classes" />
-  </component>
-  <component name="ProjectType">
-    <option name="id" value="Android" />
-  </component>
-</project>
+version https://git-lfs.github.com/spec/v1
+oid sha256:8eea97c52f32eb07cf6d1bc75896456d4fd526e44451d961815d3b17131e2a5c
+size 1202
