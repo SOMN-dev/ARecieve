@@ -20,7 +20,20 @@ public class MainActivity extends Activity {
     public void onClicked(View view){
         Intent intent = new Intent(this, CameraActivity.class);
         startActivity(intent);
+        finish();
+    }
 
+    public void onClickNetTest(View view)
+    {
+        Intent intent = new Intent(this, NetworkTestActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void onClickClientTest(View view)
+    {
+        Intent intent = new Intent(this, NetworkTestClientActivity.class);
+        startActivity(intent);
         finish();
     }
 }

@@ -1,5 +1,4 @@
-package com.example.hmdfpm;
-import android.os.Message;
+package com.example.hmdfpm.netservice;
 
 import com.stealthcopter.networktools.*;
 import com.stealthcopter.networktools.subnet.*;
@@ -7,7 +6,6 @@ import com.stealthcopter.networktools.subnet.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TCPLocalDeviceLoader {
 

@@ -1,17 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="deploymentTargetDropDown">
-    <targetSelectedWithDropDown>
-      <Target>
-        <type value="QUICK_BOOT_TARGET" />
-        <deviceKey>
-          <Key>
-            <type value="VIRTUAL_DEVICE_PATH" />
-            <value value="C:\Users\L\.android\avd\Pixel_4_XL_API_30.avd" />
-          </Key>
-        </deviceKey>
-      </Target>
-    </targetSelectedWithDropDown>
-    <timeTargetWasSelectedWithDropDown value="2021-11-27T04:47:58.220990900Z" />
-  </component>
-</project>
+version https://git-lfs.github.com/spec/v1
+oid sha256:f4ade70fd7261a13a9e0f604b19a49696a332d40183acb7c850a59d89256f0b5
+size 564

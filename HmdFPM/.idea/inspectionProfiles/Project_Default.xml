@@ -1,6 +1,3 @@
-<component name="InspectionProjectProfileManager">
-  <profile version="1.0">
-    <option name="myName" value="Project Default" />
-    <inspection_tool class="JavaJniMissingFunction" enabled="false" level="ERROR" enabled_by_default="false" />
-  </profile>
-</component>
+version https://git-lfs.github.com/spec/v1
+oid sha256:893b221d25439510c73119b4ae95b9e9d1662dfbd4be09833eecbfd145ec4a8c
+size 272
